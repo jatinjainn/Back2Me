@@ -1,0 +1,29 @@
+{
+  "name": "back2me",
+  "version": "1.0.0",
+  "description": "Back2Me is a web-based application developed as part of a college project aimed at addressing the common issue of lost items. The platform provides a user-friendly interface where individuals can create listings for items they have lost or found. Users can include detailed descriptions and images to enhance the chances of recovery.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jatinjainn/Back2Me.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jatinjainn/Back2Me/issues"
+  },
+  "homepage": "https://github.com/jatinjainn/Back2Me#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mongoose": "^8.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
