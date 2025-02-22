@@ -32,3 +32,35 @@ header {
     height: 40px;
     margin-right: 10px;
 }
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a, .cta-button {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    background: #ff9800;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cta-button:hover {
+    background: #e68900;
+}
+
+/* Hero Section */
+.hero {
+    background: url('lost-found-bg.jpg') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+}
