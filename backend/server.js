@@ -14,6 +14,10 @@ app.use(bodyParser.json());
 mongoose.connect('mongodb://localhost:27017/back2me', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+}).then(() => {
+    console.log('MongoDB connected');
+}).catch(err => {
+    console.error('MongoDB connection error:', err);
 });
 
 // Item model
@@ -27,7 +31,7 @@ const itemSchema = new mongoose.Schema({
 
 const Item = mongoose.model('Item', itemSchema);
 
-// Create a new item
+// API endpoint to add a new item
 app.post('/api/items', async (req, res) => {
     const newItem = new Item(req.body);
     try {
@@ -38,7 +42,7 @@ app.post('/api/items', async (req, res) => {
     }
 });
 
-// Get all items
+// API endpoint to get all items
 app.get('/api/items', async (req, res) => {
     try {
         const items = await Item.find();
