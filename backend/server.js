@@ -17,7 +17,10 @@ mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true,
 })
 .then(() => console.log('✅ MongoDB connected successfully'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+.catch(err => {
+    console.error('❌ MongoDB connection error:', err.message);
+    process.exit(1); // Exit if database connection fails
+});
 
 // Item model
 const itemSchema = new mongoose.Schema({
@@ -30,7 +33,7 @@ const itemSchema = new mongoose.Schema({
 
 const Item = mongoose.model('Item', itemSchema);
 
-// API endpoint to add a new item
+// API Routes
 app.post('/api/items', async (req, res) => {
     try {
         const newItem = new Item(req.body);
@@ -41,7 +44,6 @@ app.post('/api/items', async (req, res) => {
     }
 });
 
-// API endpoint to get all items
 app.get('/api/items', async (req, res) => {
     try {
         const items = await Item.find();
@@ -51,7 +53,6 @@ app.get('/api/items', async (req, res) => {
     }
 });
 
-// API endpoint to get a single item by ID
 app.get('/api/items/:id', async (req, res) => {
     try {
         const item = await Item.findById(req.params.id);
@@ -62,7 +63,6 @@ app.get('/api/items/:id', async (req, res) => {
     }
 });
 
-// API endpoint to delete an item by ID
 app.delete('/api/items/:id', async (req, res) => {
     try {
         const deletedItem = await Item.findByIdAndDelete(req.params.id);
