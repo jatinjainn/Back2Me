@@ -26,4 +26,39 @@
         </div>
     </header>
 
-  
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Lost Something? Find it Here!</h1>
+            <p>Join the community to help reunite lost items with their owners.</p>
+            <button id="openFormButton" class="cta-button">Report Lost Item</button>
+        </div>
+    </section>
+
+    <!-- RECENT LOST & FOUND GRID -->
+    <section class="lost-found-gallery">
+        <h2>Recently Reported Items</h2>
+        <div class="gallery" id="itemsList">
+            <!-- Items will be dynamically added here -->
+        </div>
+    </section>
+
+    <!-- STATISTICS SECTION -->
+    <section class="stats">
+        <h2>Community Impact</h2>
+        <p>🔎 500+ Lost Items Reported</p>
+        <p>✅ 300+ Items Recovered</p>
+    </section>
+
+    <!-- REPORT LOST ITEM MODAL -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Report Lost Item</h2>
+            <form id="lostFoundForm">
+                <!-- Report Type -->
+                <label for="reportType">Report Type:</label>
+                <select id="reportType" required>
+                    <option value="Lost">Lost</option>
+                    <option value="Found">Found</option>
+                </select>
