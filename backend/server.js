@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -10,6 +12,9 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public')); // Serve static files from public folder
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads'))); // Serve uploaded images
 
 // Connect to MongoDB Atlas
 mongoose.connect(process.env.MONGO_URI, {
@@ -22,21 +27,43 @@ mongoose.connect(process.env.MONGO_URI, {
     process.exit(1); // Exit if database connection fails
 });
 
-// Item model
+// Define Item Schema
 const itemSchema = new mongoose.Schema({
-    title: { type: String, required: true },
+    reportType: { type: String, required: true },
+    articleType: { type: String, required: true },
+    lostFoundDate: { type: Date, required: true },
+    location: { type: String, required: true },
     description: { type: String, required: true },
-    imageUrl: { type: String },
-    category: { type: String },
+    imageUrl: { type: String, required: false },
     date: { type: Date, default: Date.now },
 });
 
 const Item = mongoose.model('Item', itemSchema);
 
-// API Routes
-app.post('/api/items', async (req, res) => {
+// Set up Multer for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads'); // Save files to public/uploads
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to filename
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// API endpoint to add a new item
+app.post('/api/items', upload.single('itemImage'), async (req, res) => {
     try {
-        const newItem = new Item(req.body);
+        const newItem = new Item({
+            reportType: req.body.reportType,
+            articleType: req.body.articleType,
+            lostFoundDate: req.body.lostFoundDate,
+            location: req.body.location,
+            description: req.body.description,
+            imageUrl: req.file ? `/uploads/${req.file.filename}` : '',
+        });
+        
         const savedItem = await newItem.save();
         res.status(201).json(savedItem);
     } catch (err) {
@@ -44,6 +71,7 @@ app.post('/api/items', async (req, res) => {
     }
 });
 
+// API endpoint to get all items
 app.get('/api/items', async (req, res) => {
     try {
         const items = await Item.find();
@@ -53,6 +81,7 @@ app.get('/api/items', async (req, res) => {
     }
 });
 
+// API endpoint to get a specific item
 app.get('/api/items/:id', async (req, res) => {
     try {
         const item = await Item.findById(req.params.id);
@@ -63,6 +92,7 @@ app.get('/api/items/:id', async (req, res) => {
     }
 });
 
+// API endpoint to delete an item
 app.delete('/api/items/:id', async (req, res) => {
     try {
         const deletedItem = await Item.findByIdAndDelete(req.params.id);
