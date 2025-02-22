@@ -62,3 +62,42 @@
                     <option value="Lost">Lost</option>
                     <option value="Found">Found</option>
                 </select>
+
+                <!-- Article Type -->
+                <label for="articleType">Article Type:</label>
+                <select id="articleType" required>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Bags">Bags</option>
+                    <option value="Books">Books</option>
+                    <option value="Jewelry">Jewelry</option>
+                    <option value="Keys">Keys</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <!-- Date & Time -->
+                <label for="lostFoundDate">Date & Time:</label>
+                <input type="datetime-local" id="lostFoundDate" required>
+
+                <!-- Location -->
+                <label for="location">Location (Where Lost/Found):</label>
+                <input type="text" id="location" placeholder="e.g., College Library" required>
+
+                <!-- Description -->
+                <label for="description">Description:</label>
+                <textarea id="description" rows="3" placeholder="Describe the item..." required></textarea>
+
+                <!-- Upload Image -->
+                <label for="itemImage">Upload Image:</label>
+                <input type="file" id="itemImage" accept="image/*" required>
+                <div id="preview"></div>
+
+                <!-- Submit Button -->
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
