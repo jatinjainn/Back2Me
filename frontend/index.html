@@ -55,17 +55,17 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Report Lost Item</h2>
-            <form id="lostFoundForm">
+            <form id="lostFoundForm" enctype="multipart/form-data">
                 <!-- Report Type -->
                 <label for="reportType">Report Type:</label>
-                <select id="reportType" required>
+                <select id="reportType" name="reportType" required>
                     <option value="Lost">Lost</option>
                     <option value="Found">Found</option>
                 </select>
 
                 <!-- Article Type -->
                 <label for="articleType">Article Type:</label>
-                <select id="articleType" required>
+                <select id="articleType" name="articleType" required>
                     <option value="Electronics">Electronics</option>
                     <option value="Bags">Bags</option>
                     <option value="Books">Books</option>
@@ -76,19 +76,19 @@
 
                 <!-- Date & Time -->
                 <label for="lostFoundDate">Date & Time:</label>
-                <input type="datetime-local" id="lostFoundDate" required>
+                <input type="datetime-local" id="lostFoundDate" name="lostFoundDate" required>
 
                 <!-- Location -->
                 <label for="location">Location (Where Lost/Found):</label>
-                <input type="text" id="location" placeholder="e.g., College Library" required>
+                <input type="text" id="location" name="location" placeholder="e.g., College Library" required>
 
                 <!-- Description -->
                 <label for="description">Description:</label>
-                <textarea id="description" rows="3" placeholder="Describe the item..." required></textarea>
+                <textarea id="description" name="description" rows="3" placeholder="Describe the item..." required></textarea>
 
                 <!-- Upload Image -->
                 <label for="itemImage">Upload Image:</label>
-                <input type="file" id="itemImage" accept="image/*" required>
+                <input type="file" id="itemImage" name="itemImage" accept="image/*" required>
                 <div id="preview"></div>
 
                 <!-- Submit Button -->
