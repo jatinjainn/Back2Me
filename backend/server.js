@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
-
+const { connectDB } = require('./db');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
