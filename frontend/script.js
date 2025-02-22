@@ -61,3 +61,30 @@ document.getElementById('lostFoundForm').addEventListener('submit', async functi
         alert('An error occurred while adding the item.');
     }
 });
+
+// Load items from the backend
+async function loadItems() {
+    try {
+        const response = await fetch('http://localhost:5000/api/items');
+        const items = await response.json();
+        const itemsList = document.getElementById('itemsList');
+        itemsList.innerHTML = ''; // Clear the list before adding new items
+        items.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('item');
+            itemDiv.innerHTML = `
+                <img src="${item.imageUrl || 'placeholder.jpg'}" alt="${item.title}" style="width:100px; height:100px; border-radius:5px;">
+                <p>${item.title} - ${item.location}</p>
+                <p>${item.description}</p>
+                <p><strong>Type:</strong> ${item.articleType}</p>
+                <p><strong>Date:</strong> ${new Date(item.lostFoundDate).toLocaleString()}</p>
+            `;
+            itemsList.appendChild(itemDiv);
+        });
+    } catch (error) {
+        console.error('Error loading items:', error);
+    }
+}
+
+// Load items on page load
+window.onload = loadItems;
