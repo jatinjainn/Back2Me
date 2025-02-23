@@ -3,101 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Back2Me - Lost & Found</title>
+    <title>Back2Me - Lost and Found</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <!-- HEADER -->
-    <header>
-        <div class="navbar">
-            <div class="logo">
-                <img src="logo.png" alt="Back2Me Logo">
-                <span class="app-name">Back2Me</span>
-            </div>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#">Home</a></li>
-                    <li><button id="openFormButton" class="cta-button">Report Lost Item</button></li>
-                    <li><a href="#">Find Items</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Lost Something? Find it Here!</h1>
-            <p>Join the community to help reunite lost items with their owners.</p>
-            <button id="openFormButton" class="cta-button">Report Lost Item</button>
-        </div>
-    </section>
-
-    <!-- RECENT LOST & FOUND GRID -->
-    <section class="lost-found-gallery">
-        <h2>Recently Reported Items</h2>
-        <div class="gallery" id="itemsList">
-            <!-- Items will be dynamically added here -->
-        </div>
-    </section>
-
-    <!-- STATISTICS SECTION -->
-    <section class="stats">
-        <h2>Community Impact</h2>
-        <p>🔎 500+ Lost Items Reported</p>
-        <p>✅ 300+ Items Recovered</p>
-    </section>
-
-    <!-- REPORT LOST ITEM MODAL -->
-    <div id="reportModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Report Lost Item</h2>
-            <form id="lostFoundForm" enctype="multipart/form-data">
-                <!-- Report Type -->
-                <label for="reportType">Report Type:</label>
-                <select id="reportType" name="reportType" required>
-                    <option value="Lost">Lost</option>
-                    <option value="Found">Found</option>
-                </select>
-
-                <!-- Article Type -->
-                <label for="articleType">Article Type:</label>
-                <select id="articleType" name="articleType" required>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Bags">Bags</option>
-                    <option value="Books">Books</option>
-                    <option value="Jewelry">Jewelry</option>
-                    <option value="Keys">Keys</option>
-                    <option value="Other">Other</option>
-                </select>
-
-                <!-- Date & Time -->
-                <label for="lostFoundDate">Date & Time:</label>
-                <input type="datetime-local" id="lostFoundDate" name="lostFoundDate" required>
-
-                <!-- Location -->
-                <label for="location">Location (Where Lost/Found):</label>
-                <input type="text" id="location" name="location" placeholder="e.g., College Library" required>
-
-                <!-- Description -->
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="3" placeholder="Describe the item..." required></textarea>
-
-                <!-- Upload Image -->
-                <label for="itemImage">Upload Image:</label>
-                <input type="file" id="itemImage" name="itemImage" accept="image/*" required>
-                <div id="preview"></div>
-
-                <!-- Submit Button -->
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+    <div class="container">
+        <h1>Back2Me - Lost and Found</h1>
+        <form id="itemForm">
+            <input type="text" id="title" placeholder="Item Title" required>
+            <textarea id="description" placeholder="Description" required></textarea>
+            <select id="status">
+                <option value="Lost">Lost</option>
+                <option value="Found">Found</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="itemsList"></div>
     </div>
-
     <script src="script.js"></script>
-
 </body>
 </html>
