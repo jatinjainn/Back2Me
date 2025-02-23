@@ -14,7 +14,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+h1, h2 {
     text-align: center;
 }
 
@@ -41,6 +41,18 @@ button:hover {
     background-color: #218838;
 }
 
-#itemsList {
-    margin-top: 20px;
+.item {
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.item h3 {
+    margin: 0;
+}
+
+.item small {
+    color: gray;
 }
