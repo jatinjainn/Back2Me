@@ -56,28 +56,37 @@ async function uploadImage(imageFile, status) {
     }
 
     // Retrieve public URL of the uploaded image
-    const { data: publicURLData } = supabase.storage.from(bucket).getPublicUrl(fileName);
-    return publicURLData.publicUrl; // Return the image URL
+    return supabase.storage.from(bucket).getPublicUrl(fileName).data.publicUrl;
 }
 
 // Add new item with image upload (optional)
 async function addItem(event, status) {
     event.preventDefault();
 
-    const title = document.getElementById('title').value.trim();
-    const description = document.getElementById('description').value.trim();
-    const contact_info = document.getElementById('contact_info').value.trim();
-    const Location = document.getElementById('Location').value.trim();
-    const imageInput = document.getElementById('image').files[0];
+    const titleInput = document.getElementById('title');
+    const descriptionInput = document.getElementById('description');
+    const contactInput = document.getElementById('contact_info');
+    const imageInput = document.getElementById('image');
 
-    if (!title || !description || !contact_info || !Location) {
+    if (!titleInput || !descriptionInput || !contactInput) {
+        console.error('One or more form elements are missing.');
+        alert('There is an issue with the form. Please refresh the page and try again.');
+        return;
+    }
+
+    const title = titleInput.value.trim();
+    const description = descriptionInput.value.trim();
+    const contact_info = contactInput.value.trim();
+    const imageFile = imageInput.files[0];
+
+    if (!title || !description || !contact_info) {
         alert("Please fill in all required fields before submitting.");
         return;
     }
 
     let imageUrl = null;
-    if (imageInput) {
-        imageUrl = await uploadImage(imageInput, status);
+    if (imageFile) {
+        imageUrl = await uploadImage(imageFile, status);
         if (!imageUrl) {
             alert('Image upload failed. Please try again.');
             return;
@@ -88,13 +97,12 @@ async function addItem(event, status) {
         title, 
         description, 
         contact_info, 
-        Location,
         status, 
         image_url: imageUrl || null  
     }]);
 
     if (error) {
-        console.error('Error adding item:', error);
+        console.error('Error adding item:', error.message);
         alert(`Failed to add item: ${error.message}`);
         return;
     }
