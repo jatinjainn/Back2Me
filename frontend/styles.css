@@ -8,7 +8,7 @@
 
 /* Body */
 body {
-    background: linear-gradient(135deg, #007bff, #6610f2);
+    background: linear-gradient(135deg, #afe4f1, #be9ff1);
     color: #fff;
     text-align: center;
     padding: 20px;
@@ -39,7 +39,7 @@ header {
 .container {
     max-width: 600px;
     margin: 30px auto;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(91, 12, 12, 0.2);
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
@@ -55,7 +55,7 @@ header {
 .btn {
     display: block;
     padding: 12px;
-    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    background: linear-gradient(45deg, #ce2e54, #ff4b2b);
     color: white;
     text-decoration: none;
     border-radius: 8px;
