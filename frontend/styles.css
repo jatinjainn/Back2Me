@@ -4,11 +4,12 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease-in-out;
 }
 
 /* Body */
 body {
-    background: linear-gradient(135deg, #afe4f1, #be9ff1);
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
     color: #fff;
     text-align: center;
     padding: 20px;
@@ -16,33 +17,87 @@ body {
 
 /* Header */
 header {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
     color: white;
-    padding: 20px;
+    padding: 15px 30px;
     text-align: center;
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 10px;
+    justify-content: space-between;
+    border-radius: 15px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    margin: auto;
 }
 
-/* Logo */
-.logo {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
+/* Home Button */
+.back-btn {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #ff7e5f, #feb47b);
+    color: white;
+    border-radius: 30px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.back-btn:hover {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, #feb47b, #ff7e5f);
+}
+
+/* Home Button Icon */
+.back-btn::before {
+    content: "🏠";
+    margin-right: 8px;
 }
 
 /* Main Container */
 .container {
-    max-width: 600px;
+    max-width: 700px;
     margin: 30px auto;
-    background: rgba(91, 12, 12, 0.2);
-    padding: 25px;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 15px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Items */
+.item {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Item Image */
+.item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Item Details */
+.item-content {
+    flex-grow: 1;
+}
+
+.item h3 {
+    margin-bottom: 8px;
+    color: #1e3c72;
 }
 
 /* Buttons */
@@ -55,7 +110,7 @@ header {
 .btn {
     display: block;
     padding: 12px;
-    background: linear-gradient(45deg, #ce2e54, #ff4b2b);
+    background: linear-gradient(45deg, #f857a6, #ff5858);
     color: white;
     text-decoration: none;
     border-radius: 8px;
@@ -68,7 +123,7 @@ header {
 
 .btn:hover {
     transform: scale(1.05);
-    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    background: linear-gradient(45deg, #ff5858, #f857a6);
 }
 
 /* Forms */
@@ -76,6 +131,9 @@ form {
     display: flex;
     flex-direction: column;
     text-align: left;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    border-radius: 10px;
 }
 
 input, textarea, select, button {
@@ -96,7 +154,6 @@ button {
     color: white;
     cursor: pointer;
     font-weight: bold;
-    transition: 0.3s;
 }
 
 button:hover {
@@ -104,16 +161,18 @@ button:hover {
     background: linear-gradient(45deg, #218838, #28a745);
 }
 
-/* Items */
-.item {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    margin: 15px 0;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-    text-align: left;
-    color: #333;
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.item h3 {
-    margin-bot
+.container, .item, header, .back-btn {
+    animation: fadeIn 0.5s ease-in-out;
+}
