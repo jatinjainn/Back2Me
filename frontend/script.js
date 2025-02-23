@@ -1,9 +1,9 @@
 // Initialize Supabase client
 const SUPABASE_URL = 'https://zjfvltevplcdauogaexk.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZnZsdGV2cGxjZGF1b2dhZXhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAyODU0NTIsImV4cCI6MjA1NTg2MTQ1Mn0.aoOhebkPtpXJcxbXOLvp0eyKHJd3WsSWZg6hy0xcxA';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZnZsdGV2cGxjZGF1b2dhZXhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAyODU0NTIsImV4cCI6MjA1NTg2MTQ1Mn0.aoOhebkPtpXJcCxbXOLvp0eyKHJd3WsSWZg6hy0xcxA';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Load items based on status
+// Load items from database based on status
 async function loadItems(status = null) {
     let query = supabase.from('items').select('*').order('created_at', { ascending: false });
 
@@ -20,7 +20,7 @@ async function loadItems(status = null) {
 
     const itemsList = document.getElementById('itemsList');
     if (!itemsList) return;
-    itemsList.innerHTML = ''; // Clear list before adding new items
+    itemsList.innerHTML = ''; // Clear previous list
 
     data.forEach(item => {
         const itemDiv = document.createElement('div');
@@ -30,7 +30,7 @@ async function loadItems(status = null) {
             <h3>${item.title} (${item.status})</h3>
             <p>${item.description}</p>
             <p><strong>Contact:</strong> ${item.contact_info}</p>
-            ${item.image_url ? `<img src="${item.image_url}" alt="Item Image" style="max-width: 100%;">` : ''}
+            ${item.image_url ? `<img src="${item.image_url}" alt="Item Image" style="max-width: 100%;">` : '<small>No image uploaded</small>'}
             <small>Posted on: ${new Date(item.created_at).toLocaleString()}</small>
         `;
 
@@ -38,7 +38,29 @@ async function loadItems(status = null) {
     });
 }
 
-// Add a new item with image upload
+// Upload image to Supabase Storage and return the URL
+async function uploadImage(imageFile, status) {
+    if (!imageFile) return null; // No image uploaded, return null
+
+    const fileExt = imageFile.name.split('.').pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const bucket = status === 'Lost' ? 'lost-items' : 'found-items';
+
+    const { data, error } = await supabase.storage
+        .from(bucket)
+        .upload(fileName, imageFile, { cacheControl: '3600', upsert: false });
+
+    if (error) {
+        console.error('Image upload failed:', error);
+        return null;
+    }
+
+    // Retrieve public URL of the uploaded image
+    const { data: publicURLData } = supabase.storage.from(bucket).getPublicUrl(fileName);
+    return publicURLData.publicUrl; // Return the image URL
+}
+
+// Add new item with image upload (optional)
 async function addItem(event, status) {
     event.preventDefault();
 
@@ -48,70 +70,50 @@ async function addItem(event, status) {
     const imageInput = document.getElementById('image').files[0];
 
     if (!title || !description || !contact_info) {
-        alert("Please fill in all fields before submitting.");
+        alert("Please fill in all required fields before submitting.");
         return;
     }
 
     let imageUrl = null;
-
     if (imageInput) {
-        try {
-            const fileExt = imageInput.name.split('.').pop();
-            const fileName = `${Date.now()}.${fileExt}`;
-            const bucket = status === 'Lost' ? 'lost-items' : 'found-items';
-
-            console.log(`Uploading to bucket: ${bucket}, filename: ${fileName}`);
-
-            let { data, error } = await supabase.storage
-                .from(bucket)
-                .upload(fileName, imageInput, { cacheControl: '3600', upsert: false });
-
-            if (error) {
-                throw error;
-            }
-
-            imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${fileName}`;
-            console.log('Image uploaded successfully:', imageUrl);
-
-        } catch (uploadError) {
-            console.error('Image upload failed:', uploadError);
-            alert(`Image upload failed: ${uploadError.message}`);
+        imageUrl = await uploadImage(imageInput, status);
+        if (!imageUrl) {
+            alert('Image upload failed. Please try again.');
             return;
         }
     }
 
-    try {
-        const { error } = await supabase.from('items').insert([{ 
-            title, 
-            description, 
-            contact_info, 
-            status, 
-            image_url: imageUrl || null  
-        }]);
+    const { error } = await supabase.from('items').insert([{ 
+        title, 
+        description, 
+        contact_info, 
+        status, 
+        image_url: imageUrl || null  
+    }]);
 
-        if (error) {
-            throw error;
-        }
-
-        alert('Item added successfully!');
-        loadItems(status);
-        document.getElementById('itemForm').reset();
-
-    } catch (insertError) {
-        console.error('Error adding item:', insertError);
-        alert(`Failed to add item: ${insertError.message}`);
+    if (error) {
+        console.error('Error adding item:', error);
+        alert(`Failed to add item: ${error.message}`);
+        return;
     }
+
+    alert('Item added successfully!');
+    loadItems(status);
+    document.getElementById('itemForm').reset();
 }
 
-// Attach form submission event listeners based on page type
+// Attach form submission event listeners based on the page type
 document.addEventListener("DOMContentLoaded", function () {
-    if (document.body.classList.contains('lost-page')) {
-        document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Lost'));
-        loadItems('Lost');
-    } else if (document.body.classList.contains('found-page')) {
-        document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Found'));
-        loadItems('Found');
-    } else {
-        loadItems(); // Load all items for recent.html
+    const itemForm = document.getElementById('itemForm');
+    if (itemForm) {
+        if (document.body.classList.contains('lost-page')) {
+            itemForm.addEventListener('submit', (event) => addItem(event, 'Lost'));
+            loadItems('Lost');
+        } else if (document.body.classList.contains('found-page')) {
+            itemForm.addEventListener('submit', (event) => addItem(event, 'Found'));
+            loadItems('Found');
+        } else {
+            loadItems(); // Load all items for recent.html
+        }
     }
 });
