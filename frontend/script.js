@@ -35,19 +35,55 @@ async function loadItems(statusFilter = null) {
     });
 }
 
-// Add a new item to the database
-async function addItem(event) {
+// Add a new item to the database with image upload
+async function addItem(event, status) {
     event.preventDefault();
 
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
-    const contact_info = document.getElementById('contact_info').value;
-    const status = document.getElementById('status').value;
+    const imageInput = document.getElementById('image').files[0];
 
-    await supabase.from('items').insert([{ title, description, status, contact_info }]);
-    loadItems(status);
-    document.getElementById('itemForm').reset();
+    let imageUrl = null;
+
+    // Only upload image if user selected a file
+    if (imageInput) {
+        const fileExt = imageInput.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const bucket = status === 'Lost' ? 'lost-items' : 'found-items';
+
+        const { data, error } = await supabase.storage
+            .from(bucket)
+            .upload(fileName, imageInput);
+
+        if (error) {
+            console.error('Error uploading image:', error);
+            return;
+        }
+
+        imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${fileName}`;
+    }
+
+    // Insert item into database (with or without image)
+    const { error } = await supabase.from('items').insert([{ 
+        title, 
+        description, 
+        status, 
+        image_url: imageUrl || null  // If no image, store as null
+    }]);
+
+    if (error) {
+        console.error('Error adding item:', error);
+    } else {
+        loadItems(status);
+        document.getElementById('itemForm').reset();
+    }
 }
 
-document.getElementById('itemForm')?.addEventListener('submit', addItem);
+// Modify event listener based on page type
+if (document.body.classList.contains('lost-page')) {
+    document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Lost'));
+} else if (document.body.classList.contains('found-page')) {
+    document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Found'));
+}
+
 loadItems();
