@@ -1,179 +1,46 @@
-/* Reset Styles */
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
-    background: #f8f8f8;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
 }
 
-/* Navbar */
-header {
-    background: #11c2de;
-    color: rgb(237, 237, 237);
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.navbar {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-}
-
-.logo img {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-.nav-links li {
-    display: inline;
-}
-
-.nav-links a, .cta-button {
-    color: white;
-    text-decoration: none;
-    padding: 10px 15px;
-    background: #ff9800;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.cta-button:hover {
-    background: #e68900;
-}
-
-/* Hero Section */
-.hero {
-    background: url('lost-found-bg.jpg') no-repeat center center/cover;
-    color: white;
-    text-align: center;
-    padding: 100px 20px;
-}
-
-.hero-content {
+.container {
     max-width: 600px;
     margin: auto;
-}
-
-/* Lost & Found Grid */
-.lost-found-gallery {
-    text-align: center;
-    margin-top: 50px;
-}
-
-.gallery {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap; /* Allow items to wrap to the next line */
-}
-
-.item {
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center; /* Center text in item */
-}
-
-.item img {
-    width: 100px;
-    height: 100px;
-    border-radius: 5px;
-}
-
-/* Stats Section */
-.stats {
-    text-align: center;
-    background: #f4f4f4;
-    padding: 50px;
-}
-
-/* Modal Styling */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
     background: white;
     padding: 20px;
-    border-radius: 10px;
-    width: 60%;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Form Inputs */
-form label {
-    display: block;
-    font-weight: bold;
-    margin: 10px 0 5px;
+form {
+    display: flex;
+    flex-direction: column;
 }
 
-form input, form select, form textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+input, textarea, select, button {
+    margin: 10px 0;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-form button {
-    background: #ff9800;
+button {
+    background-color: #28a745;
     color: white;
-    padding: 10px 15px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
 }
 
-form button:hover {
-    background: #e68900;
+button:hover {
+    background-color: #218838;
 }
 
-/* Preview Image Styles */
-#preview {
-    margin-top: 10px;
-}
-
-#preview img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .gallery {
-        flex-direction: column; /* Stack items vertically on smaller screens */
-    }
-
-    .modal-content {
-        width: 90%; /* Make modal width responsive */
-    }
+#itemsList {
+    margin-top: 20px;
 }
