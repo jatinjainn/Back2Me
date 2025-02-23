@@ -67,9 +67,10 @@ async function addItem(event, status) {
     const title = document.getElementById('title').value.trim();
     const description = document.getElementById('description').value.trim();
     const contact_info = document.getElementById('contact_info').value.trim();
+    const Location = document.getElementById('Location').value.trim();
     const imageInput = document.getElementById('image').files[0];
 
-    if (!title || !description || !contact_info) {
+    if (!title || !description || !contact_info || !Location) {
         alert("Please fill in all required fields before submitting.");
         return;
     }
@@ -87,6 +88,7 @@ async function addItem(event, status) {
         title, 
         description, 
         contact_info, 
+        Location,
         status, 
         image_url: imageUrl || null  
     }]);
