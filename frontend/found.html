@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Found Item Report - Back2Me</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-btn">← Home</a>
+        <h1>Lost Item Report</h1>
+    </header>
+
+    <div class="container">
+        <form id="itemForm">
+            <input type="text" id="title" placeholder="Item Title" required>
+            <textarea id="description" placeholder="Description" required></textarea>
+            <input type="text" id="contact_info" placeholder="Your Contact Info" required>
+            <input type="hidden" id="status" value="Lost">
+            <button type="submit">Submit</button>
+        </form>
+        <div id="itemsList"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@latest/dist/umd/supabase.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
