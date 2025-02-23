@@ -99,6 +99,14 @@ button:hover {
     color: gray;
 }
 
+.item img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
 .back-btn {
     color: white;
     text-decoration: none;
