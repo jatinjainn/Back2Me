@@ -4,14 +4,12 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Load items based on status
-async function loadItems(statusFilter = null) {
-    let query = supabase.from('items').select('*').order('created_at', { ascending: false });
-
-    if (statusFilter) {
-        query = query.eq('status', statusFilter);
-    }
-
-    const { data, error } = await query;
+async function loadItems(status) {
+    const { data, error } = await supabase
+        .from('items')
+        .select('*')
+        .eq('status', status)
+        .order('created_at', { ascending: false });
 
     if (error) {
         console.error('Error loading items:', error);
@@ -19,18 +17,19 @@ async function loadItems(statusFilter = null) {
     }
 
     const itemsList = document.getElementById('itemsList');
-    if (!itemsList) return;
+    itemsList.innerHTML = '';
 
-    itemsList.innerHTML = ''; // Clear the list before adding new items
     data.forEach(item => {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('item');
+
         itemDiv.innerHTML = `
             <h3>${item.title} (${item.status})</h3>
             <p>${item.description}</p>
-            <p><strong>Contact:</strong> ${item.contact_info}</p>
+            ${item.image_url ? `<img src="${item.image_url}" alt="Item Image" style="max-width: 100%;">` : ''}
             <small>Posted on: ${new Date(item.created_at).toLocaleString()}</small>
         `;
+
         itemsList.appendChild(itemDiv);
     });
 }
