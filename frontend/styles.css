@@ -2,7 +2,23 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
 }
 
 .container {
@@ -12,15 +28,40 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    text-align: center;
 }
 
 h1, h2 {
     text-align: center;
 }
 
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    display: block;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
 form {
     display: flex;
     flex-direction: column;
+    text-align: left;
 }
 
 input, textarea, select, button {
@@ -47,6 +88,7 @@ button:hover {
     border-radius: 5px;
     margin: 10px 0;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
 }
 
 .item h3 {
@@ -55,4 +97,12 @@ button:hover {
 
 .item small {
     color: gray;
+}
+
+.back-btn {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    position: absolute;
+    left: 15px;
 }
