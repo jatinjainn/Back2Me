@@ -26,6 +26,7 @@ async function loadItems(status) {
         itemDiv.innerHTML = `
             <h3>${item.title} (${item.status})</h3>
             <p>${item.description}</p>
+            <p><strong>Contact:</strong> ${item.contact_info}</p>
             ${item.image_url ? `<img src="${item.image_url}" alt="Item Image" style="max-width: 100%;">` : ''}
             <small>Posted on: ${new Date(item.created_at).toLocaleString()}</small>
         `;
@@ -40,11 +41,12 @@ async function addItem(event, status) {
 
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
+    const contact_info = document.getElementById('contact_info').value;
     const imageInput = document.getElementById('image').files[0];
 
     let imageUrl = null;
 
-    // Only upload image if user selected a file
+    // Upload image if selected
     if (imageInput) {
         const fileExt = imageInput.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
@@ -62,12 +64,13 @@ async function addItem(event, status) {
         imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${fileName}`;
     }
 
-    // Insert item into database (with or without image)
+    // Insert item into database
     const { error } = await supabase.from('items').insert([{ 
         title, 
         description, 
+        contact_info, 
         status, 
-        image_url: imageUrl || null  // If no image, store as null
+        image_url: imageUrl || null  
     }]);
 
     if (error) {
@@ -78,11 +81,13 @@ async function addItem(event, status) {
     }
 }
 
-// Modify event listener based on page type
+// Attach correct event listeners
 if (document.body.classList.contains('lost-page')) {
     document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Lost'));
+    loadItems('Lost');
 } else if (document.body.classList.contains('found-page')) {
     document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Found'));
+    loadItems('Found');
+} else {
+    loadItems(); // Load all items on recent.html
 }
-
-loadItems();
