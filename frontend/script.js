@@ -3,13 +3,15 @@ const SUPABASE_URL = 'https://zjfvltevplcdauogaexk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZnZsdGV2cGxjZGF1b2dhZXhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAyODU0NTIsImV4cCI6MjA1NTg2MTQ1Mn0.aoOhebkPtpXJcCxbXOLvp0eyKHJd3WsSWZg6hy0xcxA';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Load items based on status
-async function loadItems(status) {
-    const { data, error } = await supabase
-        .from('items')
-        .select('*')
-        .eq('status', status)
-        .order('created_at', { ascending: false });
+// Load items (Modified to show all items in recent.html)
+async function loadItems(status = null) {
+    let query = supabase.from('items').select('*').order('created_at', { ascending: false });
+
+    if (status) {
+        query = query.eq('status', status);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
         console.error('Error loading items:', error);
@@ -18,6 +20,11 @@ async function loadItems(status) {
 
     const itemsList = document.getElementById('itemsList');
     itemsList.innerHTML = '';
+
+    if (data.length === 0) {
+        itemsList.innerHTML = '<p>No items found.</p>';
+        return;
+    }
 
     data.forEach(item => {
         const itemDiv = document.createElement('div');
@@ -35,7 +42,7 @@ async function loadItems(status) {
     });
 }
 
-// Add a new item to the database with image upload
+// Add a new item with image upload (Fixed image upload)
 async function addItem(event, status) {
     event.preventDefault();
 
@@ -58,14 +65,18 @@ async function addItem(event, status) {
 
         if (error) {
             console.error('Error uploading image:', error);
+            alert('Image upload failed. Please check your file and try again.');
             return;
         }
 
-        imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${fileName}`;
+        if (data) {
+            imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${fileName}`;
+            console.log('Image uploaded successfully:', imageUrl);
+        }
     }
 
     // Insert item into database
-    const { error } = await supabase.from('items').insert([{ 
+    const { error: insertError } = await supabase.from('items').insert([{ 
         title, 
         description, 
         contact_info, 
@@ -73,15 +84,16 @@ async function addItem(event, status) {
         image_url: imageUrl || null  
     }]);
 
-    if (error) {
-        console.error('Error adding item:', error);
+    if (insertError) {
+        console.error('Error adding item:', insertError);
     } else {
+        alert('Item added successfully!');
         loadItems(status);
         document.getElementById('itemForm').reset();
     }
 }
 
-// Attach correct event listeners
+// Attach event listeners based on page type
 if (document.body.classList.contains('lost-page')) {
     document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Lost'));
     loadItems('Lost');
