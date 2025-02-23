@@ -7,20 +7,19 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <img src="logo.png" alt="Back2Me Logo" class="logo">
+        <h1>Back2Me</h1>
+    </header>
+    
     <div class="container">
-        <h1>Back2Me - Lost and Found</h1>
-        <form id="itemForm">
-            <input type="text" id="title" placeholder="Item Title" required>
-            <textarea id="description" placeholder="Description" required></textarea>
-            <select id="status">
-                <option value="Lost">Lost</option>
-                <option value="Found">Found</option>
-            </select>
-            <button type="submit">Submit</button>
-        </form>
-        <div id="itemsList"></div>
+        <h2>Welcome to Back2Me</h2>
+        <p>Your one-stop platform to report lost and found items!</p>
+        <div class="buttons">
+            <a href="lost.html" class="btn">Lost Item Report</a>
+            <a href="found.html" class="btn">Found Item</a>
+            <a href="recent.html" class="btn">Recently Found or Lost</a>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@latest/dist/umd/supabase.js"></script>
-    <script src="script.js"></script>
 </body>
 </html>
