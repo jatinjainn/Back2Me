@@ -8,7 +8,7 @@
 
 /* Body */
 body {
-    background: linear-gradient(135deg, #afe4f1, #be9ff1);
+    background: linear-gradient(135deg, #afe4f1, #352c44);
     color: #fff;
     text-align: center;
     padding: 20px;
@@ -55,7 +55,7 @@ header {
 .btn {
     display: block;
     padding: 12px;
-    background: linear-gradient(45deg, #ce2e54, #ff4b2b);
+    background: linear-gradient(20deg, #2ece41, #66ced1);
     color: white;
     text-decoration: none;
     border-radius: 8px;
@@ -68,7 +68,7 @@ header {
 
 .btn:hover {
     transform: scale(1.05);
-    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    background: linear-gradient(20deg, #2bc93b, #94da9b);
 }
 
 /* Forms */
