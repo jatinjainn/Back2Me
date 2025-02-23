@@ -5,13 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Back2Me - Lost and Found</title>
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Supabase for Database -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@latest/dist/umd/supabase.js"></script>
 </head>
 <body>
+
+    <!-- Header -->
     <header>
-        <img src="logo.png" alt="Back2Me Logo" class="logo">
-        <h1>Back2Me</h1>
+        <div class="logo-container">
+            <img src="logo.png" alt="Back2Me Logo" class="logo">
+            <h1 class="site-title">Back2Me</h1>
+        </div>
+        <div class="nav-content">
+            <a href="#" class="nav-btn">Home</a>
+            <input type="text" class="search-bar" placeholder="Search lost & found items...">
+            <a href="contact.html" class="nav-btn">Contact Us</a>
+        </div>
     </header>
     
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Find What You Lost, Return What You Found</h1>
+            <p>Connecting people with their lost belongings effortlessly.</p>
+            <a href="recent.html" class="btn">View Recent Reports</a>
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
     <div class="container">
         <h2>Welcome to Back2Me</h2>
         <p>Your one-stop platform to report lost and found items!</p>
@@ -21,5 +48,15 @@
             <a href="recent.html" class="btn">Recently Found or Lost</a>
         </div>
     </div>
+
+   
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Back2Me. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript File -->
+    <script src="script.js"></script>
+
 </body>
 </html>
