@@ -6,10 +6,10 @@
     <title>Found Item Report - Back2Me</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="found-page">
     <header>
         <a href="index.html" class="back-btn">← Home</a>
-        <h1>Lost Item Report</h1>
+        <h1>Found Item Report</h1>
     </header>
 
     <div class="container">
@@ -18,7 +18,7 @@
             <textarea id="description" placeholder="Description" required></textarea>
             <input type="text" id="contact_info" placeholder="Your Contact Info" required>
             <input type="file" id="image" accept="image/*">
-            <input type="hidden" id="status" value="Lost">
+            <input type="hidden" id="status" value="Found">
             <button type="submit">Submit</button>
         </form>
         <div id="itemsList"></div>
