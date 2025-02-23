@@ -47,7 +47,6 @@
                 itemDiv.innerHTML = `
                     <h3>${item.title} (${item.status})</h3>
                     <p>${item.description}</p>
-                    <p><strong>Location:</strong> ${item.location || 'Not specified'}</p>
                     <p><strong>Contact:</strong> ${item.contact_info || 'N/A'}</p>
                     ${item.image_url ? `<img src="${item.image_url}" alt="Item Image" style="max-width: 100%;">` : ''}
                     <small>Posted on: ${new Date(item.created_at).toLocaleString()}</small>
