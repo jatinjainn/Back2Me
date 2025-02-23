@@ -1,9 +1,9 @@
 // Initialize Supabase client
 const SUPABASE_URL = 'https://zjfvltevplcdauogaexk.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZnZsdGV2cGxjZGF1b2dhZXhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAyODU0NTIsImV4cCI6MjA1NTg2MTQ1Mn0.aoOhebkPtpXJcCxbXOLvp0eyKHJd3WsSWZg6hy0xcxA';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZnZsdGV2cGxjZGF1b2dhZXhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAyODU0NTIsImV4cCI6MjA1NTg2MTQ1Mn0.aoOhebkPtpXJcxbXOLvp0eyKHJd3WsSWZg6hy0xcxA';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Load items (Modified to show all items in recent.html)
+// Load items based on status
 async function loadItems(status = null) {
     let query = supabase.from('items').select('*').order('created_at', { ascending: false });
 
@@ -19,12 +19,8 @@ async function loadItems(status = null) {
     }
 
     const itemsList = document.getElementById('itemsList');
-    itemsList.innerHTML = '';
-
-    if (data.length === 0) {
-        itemsList.innerHTML = '<p>No items found.</p>';
-        return;
-    }
+    if (!itemsList) return;
+    itemsList.innerHTML = ''; // Clear list before adding new items
 
     data.forEach(item => {
         const itemDiv = document.createElement('div');
@@ -42,64 +38,80 @@ async function loadItems(status = null) {
     });
 }
 
-// Add a new item with image upload (Fixed image upload)
+// Add a new item with image upload
 async function addItem(event, status) {
     event.preventDefault();
 
-    const title = document.getElementById('title').value;
-    const description = document.getElementById('description').value;
-    const contact_info = document.getElementById('contact_info').value;
+    const title = document.getElementById('title').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const contact_info = document.getElementById('contact_info').value.trim();
     const imageInput = document.getElementById('image').files[0];
+
+    if (!title || !description || !contact_info) {
+        alert("Please fill in all fields before submitting.");
+        return;
+    }
 
     let imageUrl = null;
 
-    // Upload image if selected
     if (imageInput) {
-        const fileExt = imageInput.name.split('.').pop();
-        const fileName = `${Date.now()}.${fileExt}`;
-        const bucket = status === 'Lost' ? 'lost-items' : 'found-items';
+        try {
+            const fileExt = imageInput.name.split('.').pop();
+            const fileName = `${Date.now()}.${fileExt}`;
+            const bucket = status === 'Lost' ? 'lost-items' : 'found-items';
 
-        const { data, error } = await supabase.storage
-            .from(bucket)
-            .upload(fileName, imageInput);
+            console.log(`Uploading to bucket: ${bucket}, filename: ${fileName}`);
 
-        if (error) {
-            console.error('Error uploading image:', error);
-            alert('Image upload failed. Please check your file and try again.');
-            return;
-        }
+            let { data, error } = await supabase.storage
+                .from(bucket)
+                .upload(fileName, imageInput, { cacheControl: '3600', upsert: false });
 
-        if (data) {
+            if (error) {
+                throw error;
+            }
+
             imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${fileName}`;
             console.log('Image uploaded successfully:', imageUrl);
+
+        } catch (uploadError) {
+            console.error('Image upload failed:', uploadError);
+            alert(`Image upload failed: ${uploadError.message}`);
+            return;
         }
     }
 
-    // Insert item into database
-    const { error: insertError } = await supabase.from('items').insert([{ 
-        title, 
-        description, 
-        contact_info, 
-        status, 
-        image_url: imageUrl || null  
-    }]);
+    try {
+        const { error } = await supabase.from('items').insert([{ 
+            title, 
+            description, 
+            contact_info, 
+            status, 
+            image_url: imageUrl || null  
+        }]);
 
-    if (insertError) {
-        console.error('Error adding item:', insertError);
-    } else {
+        if (error) {
+            throw error;
+        }
+
         alert('Item added successfully!');
         loadItems(status);
         document.getElementById('itemForm').reset();
+
+    } catch (insertError) {
+        console.error('Error adding item:', insertError);
+        alert(`Failed to add item: ${insertError.message}`);
     }
 }
 
-// Attach event listeners based on page type
-if (document.body.classList.contains('lost-page')) {
-    document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Lost'));
-    loadItems('Lost');
-} else if (document.body.classList.contains('found-page')) {
-    document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Found'));
-    loadItems('Found');
-} else {
-    loadItems(); // Load all items on recent.html
-}
+// Attach form submission event listeners based on page type
+document.addEventListener("DOMContentLoaded", function () {
+    if (document.body.classList.contains('lost-page')) {
+        document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Lost'));
+        loadItems('Lost');
+    } else if (document.body.classList.contains('found-page')) {
+        document.getElementById('itemForm').addEventListener('submit', (event) => addItem(event, 'Found'));
+        loadItems('Found');
+    } else {
+        loadItems(); // Load all items for recent.html
+    }
+});
